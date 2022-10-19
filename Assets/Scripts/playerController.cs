@@ -12,12 +12,13 @@ public class playerController : MonoBehaviour
     private bool invincible = false;
     private float invinTimer = 0;
     private float invincibleTime = 2;
-    private bool isGameOver = false;
+    private bool isGameOver = false;    //Stops controller when the game ends
     private Rigidbody2D body;
     private Animator anim;
     private Transform groundCheck;
     [SerializeField] private LayerMask groundLayer;
     private GameObject levelManager;
+    private bool gameWon = false;
 
     // Start is called before the first frame update
     void Start()
@@ -120,7 +121,7 @@ public class playerController : MonoBehaviour
         
     }
 
-    //Handles coin collections
+    //Handles all collisions
     void OnTriggerEnter2D(Collider2D other)
     {
         if(other.gameObject.tag == "Coin")  //If we collide with coin tag
@@ -134,6 +135,11 @@ public class playerController : MonoBehaviour
             health--;
             body.transform.position = new Vector2(-4f, 1f);
         }
+
+        if(other.gameObject.tag == "Goal")
+        {
+            gameWon = true;
+        }
     }
 
     public int getHealth()
@@ -144,5 +150,10 @@ public class playerController : MonoBehaviour
     public void setIsGameOver(bool setter)
     {
         isGameOver = setter;
+    }
+
+    public bool getWon()
+    {
+        return gameWon;
     }
 }

@@ -10,7 +10,9 @@ public class levelManager : MonoBehaviour
     public Text coins_txt;
 
     public gameOver gameOverScreen;
+    public gameWon gameWinScreen;
     int coins;  //# of coins player collected
+
     // Start is called before the first frame update
     void Start()
     {
@@ -22,8 +24,15 @@ public class levelManager : MonoBehaviour
     void Update()
     {
         int player_health = player.GetComponent<playerController>().getHealth();    //Get the health of the player
+        bool gameWinner = player.GetComponent<playerController>().getWon();
         coins_txt.GetComponent<UnityEngine.UI.Text>().text = ("X " + coins.ToString()); //Set coin_txt to the number of coins
-        health_txt.GetComponent<UnityEngine.UI.Text>().text = ("X " + player_health.ToString());    
+        health_txt.GetComponent<UnityEngine.UI.Text>().text = ("X " + player_health.ToString());
+
+        if(gameWinner)
+        {
+            gameWinScreen.Setup(coins);
+        }
+
         if(player_health == 0)
         {
             gameOverScreen.Setup(coins);

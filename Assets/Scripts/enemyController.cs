@@ -82,7 +82,7 @@ public class enemyController : MonoBehaviour
                 otherBody.velocity = new Vector2(otherBody.velocity.x, deathForce);      //Apply upwards force to colliding object
             }
 
-            if(playerDamageCollider.IsTouchingLayers(playerStompLayer))
+            if(playerDamageCollider.IsTouchingLayers(playerStompLayer) || wallCollider.IsTouchingLayers(playerStompLayer))
             {
                 otherBody.velocity = new Vector2(otherBody.velocity.x, deathForce - 2);      //Apply upwards force to colliding object
                 otherBody.GetComponent<playerController>().takeDamage(attack);
