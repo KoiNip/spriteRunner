@@ -19,6 +19,8 @@ public class enemyController : MonoBehaviour
     [SerializeField] Collider2D playerStompCollider;
     [SerializeField] Collider2D playerDamageCollider;
     [SerializeField] public float knockbackForce = 20f;
+    private int timer;  //Prevents enemy from spazzing out when they want to turn
+    private int maxTime = 30;
     public float damage = 1;
     private Animator anim;
     // Start is called before the first frame update
@@ -28,6 +30,7 @@ public class enemyController : MonoBehaviour
         groundCheckPosition = transform.Find("GroundCheck");    //Ground check is a separate object, have to find the transform of that object
         anim = GetComponent<Animator>();
         patrol = true;
+        timer = 0;
     }
 
     // Update is called once per frame
@@ -50,10 +53,22 @@ public class enemyController : MonoBehaviour
 
     void patrol_move()
     {
-        if(mustFlip || wallCollider.IsTouchingLayers(groundLayer) || wallCollider.IsTouchingLayers(enemyLayer))    //Flip enemy
+        if(timer > 0)  //If timer is active, decrement it every frame
+        {
+            timer--;
+        }
+        if(timer < 0)   //Emergency check, prevent timer from going below 0
+        {
+            timer = 0;
+        }
+
+        //Timer prevents enemies from turning in quick succession, prevents spazzing
+        if((mustFlip || wallCollider.IsTouchingLayers(groundLayer) || wallCollider.IsTouchingLayers(enemyLayer)) && timer <= 0)    //Flip enemy
         {
             flip();
+            timer = maxTime;
         }
+
         body.velocity = new Vector2(walkSpeed * Time.fixedDeltaTime, body.velocity.y);
     }
 
